@@ -390,6 +390,9 @@
             font-weight: 600;
         }
 
+        /* =============================================
+           GALLERY — Desktop base styles
+           ============================================= */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -404,6 +407,10 @@
             border-radius: 20px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             background: var(--bg-card);
+            /* FIX: ensure the anchor itself takes the full grid cell height */
+            display: block;
+            width: 100%;
+            height: 100%;
         }
 
         .gallery-item:hover {
@@ -534,6 +541,9 @@
             }
         }
 
+        /* =============================================
+           MOBILE FIX — 768px and below
+           ============================================= */
         @media (max-width: 768px) {
             section { padding: 3rem 5%; }
             header#home { padding-top: 6rem; padding-bottom: 3rem; }
@@ -573,15 +583,34 @@
             .timeline { margin-left: 10px; }
             .timeline-item { margin-left: 20px; }
             .timeline-dot { left: -34px; }
+
+            /* ── GALLERY MOBILE FIX ─────────────────────────
+               grid-auto-rows: auto  →  rows have no defined height
+               height: 100% on <img> resolves to 0  →  images invisible
+               Solution: give every gallery item a fixed pixel height
+               and reset span overrides so layout is a simple 1-col list
+            ─────────────────────────────────────────────── */
             .gallery-grid {
                 grid-template-columns: 1fr;
-                grid-auto-rows: auto;
+                grid-auto-rows: auto;   /* let items define their own height */
+                gap: 1rem;
             }
-            .gallery-item, .item-tall, .item-wide {
+
+            /* reset all span helpers — everything is one column */
+            .gallery-item,
+            .item-tall,
+            .item-wide {
                 grid-row: span 1;
                 grid-column: span 1;
+                height: 260px;          /* ← explicit height so image fills it */
             }
-            .gallery-item img { height: 100%; object-fit: cover; }
+
+            .gallery-item img {
+                width: 100%;
+                height: 100%;           /* now resolves correctly against 260px */
+                object-fit: cover;
+                display: block;
+            }
         }
     </style>
 </head>
@@ -705,7 +734,6 @@
         <h2 class="section-title">Professional Experience</h2>
         <div class="timeline">
 
-            <!-- ==================== NEW: Borey Leshen ==================== -->
             <div class="timeline-item hidden">
                 <div class="timeline-dot"></div>
                 <span class="job-date">Freelance</span>
@@ -725,7 +753,6 @@
                     </ul>
                 </div>
             </div>
-            <!-- ==================== END NEW ==================== -->
 
             <div class="timeline-item hidden">
                 <div class="timeline-dot"></div>
